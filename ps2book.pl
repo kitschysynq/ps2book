@@ -31,7 +31,6 @@ exec $perl -x -S $0 "$@"     # -x: start from the following line
 #     Printed booklet on hp_stafff.
 # - Make set of pages for -F option more configurable (e.g.`-F0.85:4-7'
 #   [better] or `-F0.85 -b 4,5,6,7' [adds yet another option..])
-# - Use File::Temp instead of POSIX::tmpnam
 
 # Copyright 2001--2007 Wolfgang Dobler
 # This file can be distributed under the same terms as Perl.
@@ -41,7 +40,7 @@ require 5;
 use strict;
 
 use Fcntl;
-use POSIX qw(tmpnam);
+use File::Temp qw(tempfile);
 use IPC::Open2;			# for bidirectional pipe to the `file' command
 use Getopt::Long;
 # Allow for `-Plp' as equivalent to `-P lp' etc:
@@ -312,7 +311,7 @@ if ($medium eq 'a4') {
 $mheight_2 = $mheight/2;
 print STDERR "\$medium = <$medium> -> ($mwidth, $mheight)\n" if ($debug);
 
-if ($display) { $tmpfile = tmpnam() }; # open temporary file
+if ($display) { (undef, $tmpfile) = tempfile() }; # open temporary file
 
 
 ## Now work
